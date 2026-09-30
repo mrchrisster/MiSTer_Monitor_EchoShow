@@ -1,0 +1,8 @@
+System logos originate from RetroPie / es-theme-carbon:
+https://github.com/RetroPie/es-theme-carbon
+Converted to white PNGs for the personal Echo Show display.
+System marks and trademarks belong to their respective owners.
+The client's MIT source license does not grant rights to those marks.
+
+Game covers are supplied by the user's MiSTer artwork installation.
+This APK does not include game cover images.

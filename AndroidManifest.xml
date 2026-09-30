@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.mistermonitor.echo" android:versionCode="5" android:versionName="0.1.4">
+    <uses-sdk android:minSdkVersion="26" android:targetSdkVersion="30" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <application android:label="MiSTer Monitor" android:icon="@drawable/icon" android:theme="@android:style/Theme.Material.NoActionBar" android:allowBackup="false" android:usesCleartextTraffic="true">
+        <activity android:name=".MonitorActivity" android:screenOrientation="landscape" android:exported="true" android:launchMode="singleTask" android:configChanges="orientation|screenSize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.HOME" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>
