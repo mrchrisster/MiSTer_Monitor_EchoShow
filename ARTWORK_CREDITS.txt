@@ -1,8 +1,23 @@
-System logos originate from RetroPie / es-theme-carbon:
+System logos: EmulationStation Carbon theme (es-theme-carbon).
+Carbon by Rookervik, based on Simple by Nils Bonenberger;
+additional contributors maintained by the RetroPie project.
+Source:
 https://github.com/RetroPie/es-theme-carbon
-Converted to white PNGs for the personal Echo Show display.
-System marks and trademarks belong to their respective owners.
-The client's MIT source license does not grant rights to those marks.
+Original notice: https://github.com/RetroPie/es-theme-carbon/blob/master/readme.txt
+
+License: Creative Commons Attribution-NonCommercial-ShareAlike (CC BY-NC-SA).
+The upstream heading names 2.0 but embeds the 4.0 legal text.
+The original notice is preserved in res/raw/carbon_notice.txt.
+https://creativecommons.org/licenses/by-nc-sa/2.0/
+https://creativecommons.org/licenses/by-nc-sa/4.0/
+
+Changes: SVG logos converted to white transparent PNGs, scaled to fit
+within 600 x 180 pixels. Modified PNG artwork is distributed under
+CC BY-NC-SA 4.0, retaining Attribution, NonCommercial and ShareAlike.
+These assets are separate from the Android client's MIT source license.
+Do not distribute the bundled logo artwork commercially under these terms.
+The used logos and trademarks are copyright of their respective owners.
+No endorsement by the theme authors or trademark owners is implied.
 
 Game covers are supplied by the user's MiSTer artwork installation.
 This APK does not include game cover images.

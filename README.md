@@ -1,20 +1,20 @@
 # MiSTer Monitor for Echo Show
 
-Version 0.1.4 is an independent Android display client for chipster6502's MiSTer Monitor server. Intended device: Echo Show 5 first generation running LineageOS / Android 11. Minimum supported Android version: 8.0. No root, Google Play Services or ScreenScraper account required for this version.
+Version 0.1.5 is an independent Android display client for chipster6502's MiSTer Monitor server. Intended device: Echo Show 5 first generation running LineageOS / Android 11. Minimum supported Android version: 8.0. No root, Google Play Services or ScreenScraper account required for this version.
 
 ## Install
 
-1. Copy `MiSTer-Monitor-EchoShow-v0.1.4.apk` to the Echo Show, open it in a file manager, and allow that file manager to install unknown apps if Android asks.
-2. Open **MiSTer Monitor**. It connects to `http://192.168.100.133:8081` by default.
+1. Copy `MiSTer-Monitor-EchoShow-v0.1.5.apk` to the Echo Show, open it in a file manager, and allow that file manager to install unknown apps if Android asks.
+2. Open **MiSTer Monitor**. On a fresh install, it discovers the server on your local network; there is no default IP address.
 3. Use **Settings** to change the IP or port. Keep the Echo Show and MiSTer on the same network.
 4. Tap the artwork to fill the screen; tap again to restore navigation. If artwork is missing, tapping its placeholder retries the request.
 
-Alternatively, with USB debugging enabled and the device authorized:
+Alternatively, with network ADB enabled and the device authorized (replace `<ECHO_SHOW_IP>` with the display's current IP):
 
 ```powershell
-adb connect 192.168.100.140:5555
-adb -s 192.168.100.140:5555 install -r MiSTer-Monitor-EchoShow-v0.1.4.apk
-adb -s 192.168.100.140:5555 shell am start -n org.mistermonitor.echo/.MonitorActivity
+adb connect <ECHO_SHOW_IP>:5555
+adb -s <ECHO_SHOW_IP>:5555 install -r MiSTer-Monitor-EchoShow-v0.1.5.apk
+adb -s <ECHO_SHOW_IP>:5555 shell am start -n org.mistermonitor.echo/.MonitorActivity
 ```
 
 The APK uses a development signing certificate. Keep the original build's `.build/development.p12` if you build updates that should install over it. A build using a different signing key requires uninstalling the old app first, which clears its settings and artwork cache. This is a sideloaded prototype, not a Play Store release.
@@ -33,6 +33,8 @@ The three-dot menu also includes **Android settings**, so you can change the Hom
 
 ## Features
 
+- Automatic UDP server discovery on fresh installs, with manual address fallback.
+
 - Landscape fullscreen dashboard with current game and system.
 - Two-second status polling and automatic reconnection.
 - MiSTer artwork-pack images loaded asynchronously. There is no direct ScreenScraper fallback yet.
@@ -44,6 +46,14 @@ The three-dot menu also includes **Android settings**, so you can change the Hom
 - After three minutes offline, a dimmed clock uses the Android system's time and timezone. Touch wakes the dashboard; the MiSTer returning online restores normal brightness.
 
 The app keeps the screen awake while it is visible, including standby. It does not power the panel off, wake a sleeping Android device, or bypass the Android lock screen. When selected as the default Home app, it opens after boot and when Home is pressed. Exiting or switching apps stops polling. The standby setting can be disabled.
+
+## Server discovery
+
+The client broadcasts `MMON_DISCOVER_V1` to UDP port 51234, both globally and to active interfaces' subnet broadcast addresses. It accepts `MMON_SERVER_V1:<port>` replies and uses the reply's source IPv4 address and advertised HTTP port. A search lasts approximately 2.4 seconds and retries every 15 seconds when no server is found. One server is selected automatically; multiple distinct servers prompt a chooser. The chosen address is remembered. HTTP snapshot polling still validates the server's response.
+
+In Settings, leave the address empty and Save to enable discovery. Entering an address switches to manual mode. Existing saved addresses are preserved when updating from earlier versions. In discovery mode, an unreachable saved address triggers rediscovery after 60 seconds; manual addresses are not replaced automatically. Searches stop when the app leaves the foreground.
+
+UDP discovery requires a shared broadcast network. Guest Wi-Fi isolation, VLAN boundaries and firewall rules can block it; use a manual hostname or IP in those cases. No server modification or account is required.
 
 ## Artwork and slow lookups
 
@@ -65,7 +75,9 @@ If Windows sandbox filesystem restrictions prevent javac from reading SDK archiv
 
 ## Validation
 
-The supplied APK compiled successfully, passed 25 host-side policy checks, and passed APK v2/v3 signature verification. Its manifest targets Android 11 (API 30). Earlier live checks against `192.168.100.133:8081` confirmed the expected snapshot and system-stat schemas. Version 0.1.4's native layout still requires physical-device verification; the approved browser mockups were checked separately.
+The supplied APK compiled successfully, passed 31 host-side policy checks plus local UDP integration checks (request/reply, invalid responses, duplicates, multiple servers, timeout and cancellation), and passed APK v2/v3 signature verification. Its manifest targets Android 11 (API 30). Native rendering and discovery on the Echo Show still require physical-device verification; the approved browser mockups were checked separately.
+
+A live LAN test using the same Java discovery implementation successfully found the existing MiSTer Monitor server without a configured server IP.
 
 Build and signing validation can be performed on a computer. Actual rendering, touchscreen operation, brightness behavior and long-running stability require installation on the Echo Show. The interface is custom drawn for touchscreen use; full accessibility navigation is not implemented in this prototype.
 
@@ -86,5 +98,6 @@ https://github.com/chipster6502/MiSTer_monitor
 
 This client source is provided under the MIT license in `LICENSE`.
 
-System-logo attribution is listed in `ARTWORK_CREDITS.txt`; logo assets are separate from the MIT source license.
+System-logo attribution is listed in `ARTWORK_CREDITS.txt`, also accessible through the app's **Artwork credits** menu. Carbon artwork is CC BY-NC-SA; converted PNGs are distributed under CC BY-NC-SA 4.0 and remain separate from the MIT source license. The original upstream notice, whose heading names 2.0 while its body names 4.0, is preserved in `res/raw/carbon_notice.txt`. The bundled artwork carries NonCommercial and ShareAlike conditions; an MIT code license does not remove them.
+
 

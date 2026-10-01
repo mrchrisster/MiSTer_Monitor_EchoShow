@@ -32,9 +32,15 @@ def run(*command):
     subprocess.run([str(c) for c in command], check=True, cwd=root)
 
 # Host-side tests cover address validation and stale-game response handling.
+raw = root / 'res' / 'raw'
+raw.mkdir(exist_ok=True)
+(raw / 'artwork_credits.txt').write_bytes((root / 'ARTWORK_CREDITS.txt').read_bytes())
 run(javac, '-encoding', 'UTF-8', '-d', build / 'test-classes',
-    root / 'src/org/mistermonitor/echo/ClientPolicy.java', root / 'tests/ClientPolicyTest.java')
+    root / 'src/org/mistermonitor/echo/ClientPolicy.java',
+    root / 'src/org/mistermonitor/echo/ServerDiscovery.java',
+    root / 'tests/ClientPolicyTest.java', root / 'tests/ServerDiscoveryTest.java')
 run(java, '-cp', build / 'test-classes', 'ClientPolicyTest')
+run(java, '-cp', build / 'test-classes', 'ServerDiscoveryTest')
 run(tools / ('aapt2' + exe), 'compile', '--dir', root / 'res', '-o', build / 'resources')
 run(tools / ('aapt2' + exe), 'link', '-o', build / 'unsigned.apk', '-I', android,
     '--manifest', root / 'AndroidManifest.xml', '--min-sdk-version', '26', '--target-sdk-version', '30',
@@ -60,7 +66,7 @@ if not key.exists():
     run(jdk / 'bin' / ('keytool' + exe), '-genkeypair', '-keystore', key, '-storetype', 'PKCS12',
         '-storepass', 'android', '-keypass', 'android', '-alias', 'development', '-keyalg', 'RSA',
         '-keysize', '2048', '-validity', '10000', '-dname', 'CN=MiSTer Monitor Development')
-output = root.parent / 'MiSTer-Monitor-EchoShow-v0.1.4.apk'
+output = root.parent / 'MiSTer-Monitor-EchoShow-v0.1.5.apk'
 run(java, '-jar', tools / 'lib/apksigner.jar', 'sign', '--ks', key, '--ks-pass', 'pass:android',
     '--key-pass', 'pass:android', '--ks-key-alias', 'development', '--v4-signing-enabled', 'false',
     '--out', output, build / 'aligned.apk')
