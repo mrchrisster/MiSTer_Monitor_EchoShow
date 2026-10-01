@@ -5,7 +5,7 @@ Version 0.1.5 is an independent Android display client for chipster6502's MiSTer
 ## Install
 
 1. Copy `MiSTer-Monitor-EchoShow-v0.1.5.apk` to the Echo Show, open it in a file manager, and allow that file manager to install unknown apps if Android asks.
-2. Open **MiSTer Monitor**. On a fresh install, it discovers the server on your local network; there is no default IP address.
+2. Open **MiSTer Monitor**. On a fresh install, it discovers the server on your local network. 
 3. Use **Settings** to change the IP or port. Keep the Echo Show and MiSTer on the same network.
 4. Tap the artwork to fill the screen; tap again to restore navigation. If artwork is missing, tapping its placeholder retries the request.
 
